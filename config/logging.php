@@ -1,5 +1,7 @@
 <?php
 
+use App\Logging\Telegram\TelegramLoggerFactory;
+use App\Logging\Telegram\TelegramLoggerHandler;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -117,6 +119,14 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'telegram' => [
+            'driver' => 'custom',
+            'via' => TelegramLoggerFactory::class,
+            'level' => env('LOG_LEVEL', 'debug'),
+            'chat_id' => -4591969891,
+            'token' => '7971627446:AAERiQiwhQaMWtTbFt8jVpQxNpYKV_NRnP4',
+        ]
     ],
 
 ];
