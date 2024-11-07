@@ -15,5 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 //    logger()->channel('telegram')->debug('Hello world');
+//    abort('123');
+//    throw new \App\Services\Exceptions\TelegramBotApiException('123');
+    logger()
+        ->channel('telegram')
+        ->info("123");
     return view('welcome');
 });

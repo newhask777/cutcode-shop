@@ -42,7 +42,13 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            //
+            if (app()->bound('sentry')) {
+                app('sentry')->captureException($e);
+            }
         });
+
+//        $this->renderable(function (NotFoundHttpException $e) {
+//            return response()->view('welcome');
+//        });
     }
 }
