@@ -26,6 +26,11 @@ class RefreshCommand extends Command
         // Delete Files
         Storage::delete($files);
 
+        // Get all files in a directory
+        $files = Storage::allFiles('public/images/brands');
+        // Delete Files
+        Storage::delete($files);
+
         $this->call('migrate:fresh', [
             '--seed' => true,
         ]);
