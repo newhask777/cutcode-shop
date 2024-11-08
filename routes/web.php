@@ -17,8 +17,15 @@ Route::get('/', function () {
 //    logger()->channel('telegram')->debug('Hello world');
 //    abort('123');
 //    throw new \App\Services\Exceptions\TelegramBotApiException('123');
-    logger()
-        ->channel('telegram')
-        ->info("123");
+//    logger()
+//        ->channel('telegram')
+//        ->info("123");
+//    dump(
+//        \App\Models\Product::query()
+//            ->select(['id', 'title', 'brand_id'])
+//            ->with(['categories', 'brand'])
+//            ->where('id', 1)
+//            ->get()
+//    );
     return view('welcome');
 });
