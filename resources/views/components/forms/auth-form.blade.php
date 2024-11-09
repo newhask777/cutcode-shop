@@ -3,7 +3,7 @@
         {{ $title }}
     </h1>
 
-    <form class="space-y-3">
+    <form class="space-y-3" action="{{ $action }}" method="{{ $method }}">
         {{ $slot }}
     </form>
 
@@ -16,9 +16,11 @@
             <a href="#" class="inline-block text-white hover:text-white/70 text-xxs md:text-xs font-medium"
                target="_blank" rel="noopener">Пользовательское соглашение</a>
         </li>
+
         <li class="hidden md:block">
             <div class="h-full w-[2px] bg-white/20"></div>
         </li>
+
         <li>
             <a href="#" class="inline-block text-white hover:text-white/70 text-xxs md:text-xs font-medium"
                target="_blank" rel="noopener">Политика конфиденциальности</a>

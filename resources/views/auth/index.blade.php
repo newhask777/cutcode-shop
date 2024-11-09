@@ -2,18 +2,26 @@
 
 @section('title', 'Вход в аккаунт')
 @section('content')
-    <x-forms.auth-form title="Вход в аккаунт">
+
+    <x-forms.auth-form
+        title="Вход в аккаунт"
+        action="{{ route('signIn') }}"
+        method="POST"
+    >
+
+        @csrf
+
         <x-forms.text-input
             type="email"
             name="email"
             placeholder="E-mail"
             required="true"
+            value="{{ old('email') }}"
             :isError="$errors->has('email')"
         />
+
         @error('email')
-        <x-forms.error>
-            {{ $message }}
-        </x-forms.error>
+        <x-forms.error>{{$message}}</x-forms.error>
         @enderror
 
         <x-forms.text-input
@@ -21,13 +29,8 @@
             name="password"
             placeholder="Password"
             required="true"
-            :isError="$errors->has('password')"
+            :isError="$errors->has('email')"
         />
-        @error('password')
-        <x-forms.error>
-            {{ $message }}
-        </x-forms.error>
-        @enderror
 
         <x-forms.primary-button>
             Войти
@@ -55,7 +58,7 @@
                 <div class="text-xxs md:text-xs"><a href="#"
                                                     class="text-white hover:text-white/70 font-bold">Забыли пароль?</a>
                 </div>
-                <div class="text-xxs md:text-xs"><a href="#"
+                <div class="text-xxs md:text-xs"><a href="{{ route('signUp') }}"
                                                     class="text-white hover:text-white/70 font-bold">Регистрация</a>
                 </div>
             </div>

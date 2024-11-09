@@ -1,10 +1,14 @@
 @extends('layouts.auth')
 
-@section('title', 'Забыли пароль?')
+@section('title', 'Востановление пароля')
 @section('content')
-    @csrf
+    <x-forms.auth-form
+        title="Востановление пароля"
+        action=""
+        method="POST"
+    >
+        @csrf
 
-    <x-forms.auth-form title="Забыли пароль" action="">
         <x-forms.text-input
             type="email"
             name="email"
@@ -18,16 +22,38 @@
         </x-forms.error>
         @enderror
 
+        <x-forms.text-input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required="true"
+            :isError="$errors->has('password')"
+        />
+        @error('password')
+        <x-forms.error>
+            {{ $message }}
+        </x-forms.error>
+        @enderror
+
+        <x-forms.text-input
+            type="password"
+            name="password_confirmation"
+            placeholder="Confirm password"
+            required="true"
+            :isError="$errors->has('password_confirmation')"
+        />
+        @error('password_confirmation')
+        <x-forms.error>
+            {{ $message }}
+        </x-forms.error>
+        @enderror
+
         <x-forms.primary-button>
-            Отправить
+            Обнавить пароль
         </x-forms.primary-button>
 
         <x-slot:buttons>
-            <div class="space-y-3 mt-5">
-                <div class="text-xxs md:text-xs"><a href="{{ route('login') }}"
-                                                    class="text-white hover:text-white/70 font-bold">Вспомнил пароль</a>
-                </div>
-            </div>
+
         </x-slot:buttons>
     </x-forms.auth-form>
 @endsection

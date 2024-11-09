@@ -2,9 +2,14 @@
 
 @section('title', 'Забыли пароль?')
 @section('content')
-    @csrf
 
-    <x-forms.auth-form title="Забыли пароль" action="">
+    <x-forms.auth-form
+        title="Забыли пароль"
+        action=""
+        method="POST"
+    >
+        @csrf
+
         <x-forms.text-input
             type="email"
             name="email"
