@@ -4,16 +4,18 @@
 @section('content')
     <x-forms.auth-form
         title="Востановление пароля"
-        action=""
+        action="{{ route('password.update') }}"
         method="POST"
     >
         @csrf
 
+        <input type="hidden" name="token" value="{{ $token }}">
         <x-forms.text-input
             type="email"
             name="email"
             placeholder="E-mail"
             required="true"
+            value="{{ request('email') }}"
             :isError="$errors->has('email')"
         />
         @error('email')
@@ -51,6 +53,10 @@
         <x-forms.primary-button>
             Обнавить пароль
         </x-forms.primary-button>
+
+        <x-slot:socialAuth>
+
+        </x-slot:socialAuth>
 
         <x-slot:buttons>
 

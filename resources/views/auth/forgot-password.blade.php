@@ -5,7 +5,7 @@
 
     <x-forms.auth-form
         title="Забыли пароль"
-        action=""
+        action="{{ route('password.email') }}"
         method="POST"
     >
         @csrf
@@ -15,6 +15,7 @@
             name="email"
             placeholder="E-mail"
             required="true"
+            value="{{ request('email') }}"
             :isError="$errors->has('email')"
         />
         @error('email')
@@ -26,6 +27,10 @@
         <x-forms.primary-button>
             Отправить
         </x-forms.primary-button>
+
+        <x-slot:socialAuth>
+
+        </x-slot:socialAuth>
 
         <x-slot:buttons>
             <div class="space-y-3 mt-5">
