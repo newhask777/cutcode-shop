@@ -18,11 +18,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'index')->name('login');
-    Route::post('/login', 'signIn')->name('signIn');
+    Route::post('/login', 'signIn')
+        ->middleware('throttle:auth')
+        ->name('signIn');
 
     # TODO 3rd lesson
     Route::get('/sign-up', 'signUp')->name('signUp');
-    Route::post('/sign-up', 'store')->name('store');
+    Route::post('/sign-up', 'store')
+        ->middleware('throttle:auth')
+        ->name('store');
 
     Route::delete('/logout', 'loqOut')->name('loqOut');
 
@@ -41,6 +45,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/reset-password', 'resetPassword')
         ->middleware('guest')
         ->name('password.update');
+
+    Route::get('/auth/socialite/github/redirect', 'github')
+        ->name('socialite.github');
+
+
+    Route::get('/auth/socialite/github/callback', 'githubCallback')->name('socialite.github.callback');
 });
 
 Route::get('/', HomeController::class)->name('home');

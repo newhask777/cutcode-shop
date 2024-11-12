@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
                         ->debug("query longer than 1ms:" . $query->sql, $query->bindings);
                 }
             });
-            
+
             app(Kernel::class)->whenRequestLifecycleIsLongerThan(
                 CarbonInterval::seconds(4),
                 function () {

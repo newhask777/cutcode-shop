@@ -14,12 +14,15 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\Factory;
+use Laravel\Socialite\Facades\Socialite;
 
 
 class AuthController extends Controller
 {
-    public function index()
+    public function index(): Factory|View|Application|RedirectResponse
     {
+//        flash()->info('Test');
+//        return redirect()->route('home');
         return view('auth.index');
     }
 
@@ -36,6 +39,7 @@ class AuthController extends Controller
     public function signIn(SignInFormRequest $request): RedirectResponse
     {
         # TODO 3rd rate limit
+
         if (!auth()->attempt($request->validated())) {
             return back()->withErrors([
                 'email' => 'The provided credentials do not match our records.',
@@ -74,16 +78,17 @@ class AuthController extends Controller
 
     public function forgotPassword(ForgotPasswordFormRequest $request): RedirectResponse
     {
-        $request->validate(['email' => 'required|email']);
-
         $status = Password::sendResetLink(
             $request->only('email')
         );
 
         // TODO 3rd lesson Flash
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with(['message' => __($status)])
-            : back()->withErrors(['email' => __($status)]);
+        if ($status === Password::RESET_LINK_SENT) {
+            flash()->alert(__($status));
+            return back();
+        }
+
+        return back()->withErrors(['email' => __($status)]);
     }
 
     public function reset(string $token): Factory|View|Application
@@ -111,5 +116,31 @@ class AuthController extends Controller
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('login')->with('message', __($status))
             : back()->withErrors(['email' => [__($status)]]);
+    }
+
+    public function github(): RedirectResponse
+    {
+        return Socialite::driver('github')->redirect();
+    }
+
+    public function githubCallback()
+    {
+        $githubUser = Socialite::driver('github')->user();
+
+        $user = User::query()->updateOrCreate([
+            'github_id' => $githubUser->id,
+        ], [
+            'name' => $githubUser->name ?? $githubUser->nickname,
+            'email' => $githubUser->email ?? '',
+            'password' => $githubUser->password ?? bcrypt(str()->random(20))
+//            'github_token' => $githubUser->token,
+//            'github_refresh_token' => $githubUser->refreshToken,
+        ]);
+
+
+        auth()->login($user);
+
+        return redirect()
+            ->intended(route('home'));
     }
 }

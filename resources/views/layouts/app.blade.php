@@ -16,6 +16,14 @@
 </head>
 <body class="antialiased">
 
+@if($message = flash()->get())
+    <div class="{{ $message->class() }} p-5">
+        {{ $message->$message }}
+    </div>
+@endif
+
+@yield('content')
+
 <main class="py-16 lg:py-20">
     <div class="container">
 
