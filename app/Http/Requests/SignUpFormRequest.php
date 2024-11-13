@@ -2,17 +2,19 @@
 
 namespace App\Http\Requests;
 
+
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
 class SignUpFormRequest extends FormRequest
 {
+
     public function authorize(): bool
     {
         return auth()->guest();
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => ['required', 'string', 'min:1'],
@@ -21,7 +23,7 @@ class SignUpFormRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->merge([
             'email' => str(request('email'))

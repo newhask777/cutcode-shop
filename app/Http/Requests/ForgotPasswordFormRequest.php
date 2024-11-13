@@ -11,7 +11,7 @@ class ForgotPasswordFormRequest extends FormRequest
         return auth()->guest();
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'email' => ['required', 'email:dns'],
