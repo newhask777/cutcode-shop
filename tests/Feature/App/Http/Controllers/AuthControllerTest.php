@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\App\Http\Controllers;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Requests\SignInFormRequest;
 use App\Http\Requests\SignUpFormRequest;
 use App\Listeners\SendEmailNewUserListener;
 use App\Models\User;
@@ -23,10 +24,94 @@ class AuthControllerTest extends TestCase
      * @test
      * @return void
      */
+    public function it_login_page_success(): void
+    {
+        $this->get(action([AuthController::class, 'index']))
+            ->assertOk()
+            ->assertSee('Вход в аккаунт')
+            ->assertViewIs('auth.index');
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function it_sign_up_page_success(): void
+    {
+        $this->get(action([AuthController::class, 'signUp']))
+            ->assertOk()
+            ->assertSee('Регистрация')
+            ->assertViewIs('auth.sign-up');
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function it_page_page_success(): void
+    {
+        $this->get(action([AuthController::class, 'forgot']))
+            ->assertOk()
+            ->assertViewIs('auth.forgot-password');
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function it_sign_in_success(): void
+    {
+        $password = '12345678';
+
+        $user = User::factory()->create([
+            'email' => 'haskellisp@gmail.com',
+            'password' => bcrypt($password)
+        ]);
+
+//        dd($user);
+
+        $request = SignInFormRequest::factory()->create([
+            'email' => $user->email,
+            'password' => $password
+        ]);
+
+        $response = $this->post(action([AuthController::class, 'signIn']), $request);
+
+        $response->assertValid()
+            ->assertRedirect(route('home'));
+
+        $this->assertAuthenticatedAs($user);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function it_logout_success(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'haskellisp@gmail.com',
+        ]);
+
+        $this->actingAs($user)->delete(action([AuthController::class, 'logOut']));
+        $this->assertGuest();
+    }
+
+    public function it_reset_password_success(): void
+    {
+
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     public function it_store_success(): void
     {
         Notification::fake();
         Event::fake();
+
+        # Testing store method
 
         $request = SignUpFormRequest::factory()->create([
             'email' => 'haskellisp@gmail.com',
